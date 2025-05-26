@@ -19,8 +19,6 @@ MariaDB Docker!
 
 Python / scripts de automatización
 
-
-
 Principalmente iniciaras instalando Docker en tu servidor 
 
 trabajaremos bajo Ubuntu server
@@ -47,3 +45,26 @@ nuestro contenedor esta corriendo y probaremos que nos podamos conectar a la bas
 
 hacemos pruebas de conexion interna y externa podemor ver como esta base de datos es accesible
 
+instalremos zabbix de acuerdo a la pagina oficial, tendremos en cuenta que ya tenemos una BD iniciada y corriendo para la instalacion 
+
+puede que en la configuracion de la base de datos sea necesario agregar unos privilegios mas altos 
+
+GRANT ALL PRIVILEGES ON zabbix.* TO 'zabbix'@'%' IDENTIFIED BY 'password';
+FLUSH PRIVILEGES;
+
+'zabbix'@'%':
+'zabbix' es el nombre del usuario cuya contraseña estás cambiando.
+
+'%' es el host desde el cual el usuario puede conectarse. En este caso, el símbolo % significa "cualquier host", lo que permite que el usuario zabbix se conecte desde cualquier dirección IP, no solo desde localhost (que sería 'localhost').
+
+vamos a arreglar esto 
+
+ya que con esto hemos vuelto publica la BD
+
+recuerda instalar el local 
+
+sudo locale-gen en_US.UTF-8
+
+update-locale LANG=en_US.UTF-8
+
+tail -n 100 /var/log/syslog
