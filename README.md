@@ -15,7 +15,7 @@ Dockerfile
 
 Zabbix (Server, Agent, Frontend)
 
-MariaDB
+MariaDB Docker!
 
 Python / scripts de automatización
 
