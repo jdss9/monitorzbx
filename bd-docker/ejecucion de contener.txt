@@ -1,1 +1,6 @@
+Docker RUN
 docker run --restart=always -d --name zabbix -e MYSQL_ROOT_PASSWORD=password9 -e MYSQL_DATABASE=zabbix -p 3308:3306 -v /opt/zabbix/per_data:/var/lib/mysql mariadb:11.4.5
+
+Dockerfile
+
+docker run --restart=always -d --name zabbix_df -p 3308:3306 -v /opt/zabbixdf/per_data:/var/lib/mysql maridbzbx:1

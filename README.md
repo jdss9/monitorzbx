@@ -68,3 +68,10 @@ sudo locale-gen en_US.UTF-8
 update-locale LANG=en_US.UTF-8
 
 tail -n 100 /var/log/syslog
+
+
+******************************************************
+
+hasta este punto creamos una base de datos ejecutando el contenerdor directamente, pero si queremos volverlo un poco mas seguro, para esto vamos a utilizar dos metodos principalmente crear una base de datos con Dockerfile y el segundo asi es con dockercompose
+
+iniciaremos con docker file 
