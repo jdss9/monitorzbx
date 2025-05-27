@@ -1,77 +1,157 @@
-🛠 Proyecto de Monitoreo con Zabbix + Base de Datos en Contenedor
-Este proyecto tiene como objetivo la creación de una solución de monitoreo basada en Zabbix, enfocada en el despliegue y supervisión de una base de datos dentro de un contenedor. Está pensado como una implementación modular y fácilmente replicable para entornos de desarrollo, pruebas o producción.
+🛠️ Proyecto de Monitoreo con Zabbix + Base de Datos en Contenedor
+Este proyecto propone una solución de monitoreo moderna basada en Zabbix, con enfoque en el despliegue y supervisión de una base de datos MariaDB ejecutada dentro de un contenedor Docker. Su diseño modular permite escalar y replicar fácilmente en entornos de desarrollo, pruebas o producción.
 
-🎯 Objetivos principales
-Desplegar una base de datos (MariaDB) dentro de un contenedor.
+🎯 Objetivos Principales
+📦 Desplegar una base de datos (MariaDB) en un contenedor Docker.
 
-Implementar un entorno de monitoreo con Zabbix Server, Zabbix Agent y Zabbix Frontend en el servidor
+🔍 Implementar un entorno completo de monitoreo:
 
-Configurar plantillas y elementos de monitoreo personalizados para la base de datos.
+Zabbix Server
 
-Proveer documentación clara para replicar y escalar el entorno.
+Zabbix Agent
 
-🔧 Tecnologías utilizadas
-Dockerfile
+Zabbix Frontend
 
-Zabbix (Server, Agent, Frontend)
+🛠️ Configurar plantillas y elementos de monitoreo personalizados para MariaDB.
 
-MariaDB Docker!
+📚 Proveer documentación clara para facilitar la instalación, configuración y escalabilidad.
 
-Python / scripts de automatización
+🔧 Tecnologías Utilizadas
+Docker
 
-Principalmente iniciaras instalando Docker en tu servidor 
+MariaDB
 
-trabajaremos bajo Ubuntu server
+Zabbix
 
-debes tener en cuenta que para zabbix es necesario utilizar una version de BD, si descargas la ultima version y esta no es la version soportada tendras problemas.
+Dockerfile / Docker Compose
 
-en este caso utilizaremos el pull
+Bash / Python para automatización
 
+Sistema operativo base: Ubuntu Server
+
+🚀 Primeros Pasos
+1. Instalar Docker en el servidor
+Asegúrate de tener Docker instalado antes de continuar. Este proyecto fue probado sobre Ubuntu Server.
+
+2. Preparar la imagen de MariaDB
+⚠️ Importante: Zabbix requiere una versión específica de MariaDB. Usar una versión incompatible puede causar errores durante la instalación.
+
+Usaremos:
+
+bash
+Copiar
+Editar
 docker pull mariadb:11.4.5
+3. Ejecutar contenedor de MariaDB
+📌 Se utilizará almacenamiento persistente en /opt/zabbix/per_data y se expondrá el puerto 3308 hacia el host.
 
-utilizaremos la ejecucion del contenedor de la siguiente manera:
+bash
+Copiar
+Editar
+docker run --restart=always -d \
+  --name zabbix-db \
+  -e MYSQL_ROOT_PASSWORD=password9 \
+  -e MYSQL_DATABASE=zabbix \
+  -p 3308:3306 \
+  -v /opt/zabbix/per_data:/var/lib/mysql \
+  mariadb:11.4.5
+🔐 Reemplaza password9 por una contraseña segura para producción.
 
-tenga en cuenta que para este documento utilizaremos como contrase;a password9 usted debe poner un password mas seguro y de ambiente de produccion 
+4. Verificar conexión a la base de datos
+Puedes probar la conexión desde el host:
 
-Nota: tenga en cuenta que estamos utilizando comando de cmd y que estos quedaran, puede utilizar algunos de los metodos para eliminar o no permitir que esta infomracion se guarde en su cmd.
+bash
+Copiar
+Editar
+mysql --host 127.0.0.1 -P3308 -u root -p
+⚙️ Configurar Zabbix
+Instalaremos Zabbix según la documentación oficial, utilizando la base de datos previamente desplegada.
 
-utilizaremos almacenamiento persistente y crearemos la data en opt, existen mas metodos para almacenar la infomracion y asegurar la data, pero este es el metodo que utilziaremos en esta entrega.
+Si es necesario, otorga permisos adicionales en la base de datos:
 
-exponemos el puerto 3308 hacia el exterior
-
-docker run --restart=always -d --name zabbix -e MYSQL_ROOT_PASSWORD=password9 -e MYSQL_DATABASE=zabbix -p 3308:3306 -v /opt/zabbix/per_data:/var/lib/mysql mariadb:11.4.5
-
-nuestro contenedor esta corriendo y probaremos que nos podamos conectar a la base de datos
-
-hacemos pruebas de conexion interna y externa podemor ver como esta base de datos es accesible
-
-instalremos zabbix de acuerdo a la pagina oficial, tendremos en cuenta que ya tenemos una BD iniciada y corriendo para la instalacion 
-
-puede que en la configuracion de la base de datos sea necesario agregar unos privilegios mas altos 
-
+sql
+Copiar
+Editar
 GRANT ALL PRIVILEGES ON zabbix.* TO 'zabbix'@'%' IDENTIFIED BY 'password';
 FLUSH PRIVILEGES;
+🔎 '%' permite conexiones desde cualquier IP. Para mayor seguridad, usa solo la IP específica del contenedor o la red Docker.
 
-'zabbix'@'%':
-'zabbix' es el nombre del usuario cuya contraseña estás cambiando.
+🌐 Consideraciones de Red y Seguridad
+La red por defecto de Docker usa el rango 172.17.0.0/16. Si estás accediendo desde otro contenedor, la IP visible para MySQL será probablemente 172.17.0.1.
 
-'%' es el host desde el cual el usuario puede conectarse. En este caso, el símbolo % significa "cualquier host", lo que permite que el usuario zabbix se conecte desde cualquier dirección IP, no solo desde localhost (que sería 'localhost').
+Crea el usuario con permisos específicos según la IP desde la que se conectará Zabbix:
 
-vamos a arreglar esto 
+sql
+Copiar
+Editar
+CREATE USER 'zabbix'@'172.17.0.1' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON zabbix.* TO 'zabbix'@'172.17.0.1';
+🧱 Inicializar la Base de Datos de Zabbix
+Una vez creados los permisos y base de datos:
 
-ya que con esto hemos vuelto publica la BD
+sql
+Copiar
+Editar
+CREATE DATABASE zabbix CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+SET GLOBAL log_bin_trust_function_creators = 1;
+Cargar la estructura inicial de la base de datos:
 
-recuerda instalar el local 
+bash
+Copiar
+Editar
+zcat /usr/share/zabbix/sql-scripts/mysql/server.sql.gz | \
+  mysql --default-character-set=utf8mb4 --host 127.0.0.1 -u zabbix -P 3308 -p zabbix
+🛡️ Notas de Seguridad
+Nunca expongas la base de datos a redes públicas sin restricciones de acceso.
 
+Al usar 'zabbix'@'%', cualquier IP puede conectarse si conoce la contraseña.
+
+Considera el uso de redes personalizadas en Docker o reglas de firewall para restringir el acceso.
+
+🧪 Mejoras: Usar Dockerfile o Docker Compose
+🏗️ Dockerfile
+Puedes personalizar la configuración de MariaDB y automatizar su despliegue mediante un Dockerfile. Aquí definimos solo la contraseña de root, ya que Zabbix se encargará de crear el esquema:
+
+Dockerfile
+Copiar
+Editar
+FROM mariadb:11.4.5
+ENV MYSQL_ROOT_PASSWORD=password9
+🧰 Docker Compose (Recomendado para entornos reales)
+Permite definir múltiples servicios (Zabbix, MariaDB, frontend) en un solo archivo y gestionarlos fácilmente:
+
+yaml
+Copiar
+Editar
+version: '3.1'
+services:
+  db:
+    image: mariadb:11.4.5
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password9
+      MYSQL_DATABASE: zabbix
+    ports:
+      - "3308:3306"
+    volumes:
+      - /opt/zabbix/per_data:/var/lib/mysql
+      
+🧩 Utilidades y Debug
+Establecer configuración de idioma (recomendado para evitar errores en la instalación de Zabbix)
+bash
+Copiar
+Editar
 sudo locale-gen en_US.UTF-8
-
-update-locale LANG=en_US.UTF-8
-
+sudo update-locale LANG=en_US.UTF-8
+Ver últimos mensajes del sistema
+bash
+Copiar
+Editar
 tail -n 100 /var/log/syslog
+✅ Estado Actual
+✅ Base de datos MariaDB corriendo en contenedor
+✅ Usuario y permisos configurados
+✅ Zabbix listo para conectarse y comenzar monitoreo
 
-
-******************************************************
-
-hasta este punto creamos una base de datos ejecutando el contenerdor directamente, pero si queremos volverlo un poco mas seguro, para esto vamos a utilizar dos metodos principalmente crear una base de datos con Dockerfile y el segundo asi es con dockercompose
-
-iniciaremos con docker file 
+💬 Comentarios y Mejoras
+Este proyecto está en evolución. Si tienes sugerencias o encuentras errores, ¡los issues y pull requests son bienvenidos!
