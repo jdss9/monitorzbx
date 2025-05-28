@@ -1,4 +1,4 @@
-![Portada](pictures/portada.png)
+![Portada](pictures/portada2.png)
 
 ## 🛠️ Proyecto de Monitoreo con Zabbix + Base de Datos en Contenedor
 
