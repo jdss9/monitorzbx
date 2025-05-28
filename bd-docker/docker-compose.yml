@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:11.4.5
+    container_name: mariadb-container
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: password9
+    
+    ports:
+      - "3309:3306"
+    volumes:
+      - zbx-compose:/var/lib/mysql
+
+volumes:
+  zbx-compose:
