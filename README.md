@@ -1,47 +1,49 @@
-🛠️ Proyecto de Monitoreo con Zabbix + Base de Datos en Contenedor
+## 🛠️ Proyecto de Monitoreo con Zabbix + Base de Datos en Contenedor
+
 Este proyecto propone una solución de monitoreo moderna basada en Zabbix, con enfoque en el despliegue y supervisión de una base de datos MariaDB ejecutada dentro de un contenedor Docker. Su diseño modular permite escalar y replicar fácilmente en entornos de desarrollo, pruebas o producción.
 
-🎯 Objetivos Principales
-📦 Desplegar una base de datos (MariaDB) en un contenedor Docker.
+---
 
-🔍 Implementar un entorno completo de monitoreo:
+### 🎯 Objetivos Principales
 
-Zabbix Server
+- 📦 Desplegar una base de datos (MariaDB) en un contenedor Docker.
 
-Zabbix Agent
+- 🔍 Implementar un entorno completo de monitoreo:
+  - Zabbix Server
+  - Zabbix Agent
+  - Zabbix Frontend
 
-Zabbix Frontend
+- 🛠️ Configurar plantillas y elementos de monitoreo personalizados para MariaDB.
 
-🛠️ Configurar plantillas y elementos de monitoreo personalizados para MariaDB.
+- 📚 Proveer documentación clara para facilitar la instalación, configuración y escalabilidad.
 
-📚 Proveer documentación clara para facilitar la instalación, configuración y escalabilidad.
+---
 
-🔧 Tecnologías Utilizadas
-Docker
+### 🔧 Tecnologías Utilizadas
 
-MariaDB
+- Docker  
+- MariaDB  
+- Zabbix  
+- Dockerfile / Docker Compose  
+- Bash / Python para automatización  
+- Sistema operativo base: Ubuntu Server  
 
-Zabbix
+---
 
-Dockerfile / Docker Compose
+### 🚀 Primeros Pasos
 
-Bash / Python para automatización
+#### 1. Instalar Docker en el servidor
 
-Sistema operativo base: Ubuntu Server
-
-🚀 Primeros Pasos
-1. Instalar Docker en el servidor
 Asegúrate de tener Docker instalado antes de continuar. Este proyecto fue probado sobre Ubuntu Server.
 
-2. Preparar la imagen de MariaDB
+#### 2. Preparar la imagen de MariaDB
+
 ⚠️ Importante: Zabbix requiere una versión específica de MariaDB. Usar una versión incompatible puede causar errores durante la instalación.
 
-Usaremos:
-
-bash
-Copiar
-Editar
+```bash
 docker pull mariadb:11.4.5
+
+
 3. Ejecutar contenedor de MariaDB
 📌 Se utilizará almacenamiento persistente en /opt/zabbix/per_data y se expondrá el puerto 3308 hacia el host.
 
