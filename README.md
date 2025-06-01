@@ -41,7 +41,7 @@ docker pull mariadb:11.4.5
 
 📌 Se utilizará almacenamiento persistente en `/opt/zabbix/per_data` y se expondrá el puerto `3308` hacia el contenedor.
 
-docker run --restart=always -d
+docker run --restart=always -d \n
   --name zabbix-db
   -e MYSQL_ROOT_PASSWORD=password9
   -e MYSQL_DATABASE=zabbix
@@ -51,13 +51,15 @@ docker run --restart=always -d
 
 🔐 Reemplaza `password9` por una contraseña segura para producción.
 
-![Portada](pictures/contenedorcreado.png)
+![contenderbasic](pictures/contenedorcreado.png)
 
 ### 4. Verificar conexión a la base de datos
 
 Puedes probar la conexión desde el host:
 
 mysql --host 127.0.0.1 -P3308 -u root -p
+
+![conexion de contenedor](pictures/pruebadeconexioninterna.png)
 
 ## ⚙️ Configurar Zabbix
 
