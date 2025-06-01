@@ -1,5 +1,5 @@
 ![Portada](pictures/portada2.png)
-#Hola
+
 ## 🛠️ Proyecto de Monitoreo con Zabbix + Base de Datos en Contenedor
 
 Este proyecto propone una solución de monitoreo moderna basada en Zabbix, con enfoque en el despliegue y supervisión de una base de datos MariaDB ejecutada dentro de un contenedor Docker. Su diseño modular permite escalar y replicar fácilmente en entornos de desarrollo, pruebas o producción.
