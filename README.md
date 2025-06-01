@@ -133,7 +133,7 @@ ENV MYSQL_ROOT_PASSWORD=password9
 Docker Compose es una herramienta mucho más eficiente al momento de ejecutar una aplicación, ya que permite definir y mantener todo tu entorno en un solo archivo. Por eso, en este caso trabajaremos con un volumen persistente, pero lo crearemos directamente en el entorno de Docker, no de forma manual ni con una ruta local específica.
 
 Nuestro archivo tiene como objetivo final crear un volumen, donde se almacenará la información de manera persistente. A diferencia de lo que hemos hecho hasta ahora —donde indicábamos una ruta en el host—, aquí podemos imaginar este volumen como una “caja interna” de Docker donde se guardará toda la información
-
+```
 version: '3.8'
 
 services:
@@ -149,7 +149,7 @@ services:
       - zbx-compose:/var/lib/mysql
 volumes:
   zbx-compose:
-
+```
 Lo puedes ejecutar con: docker compose up -d
 
 Ten en cuenta que debes estar ubicado en el directorio donde se encuentra tu archivo docker-compose.yml.
