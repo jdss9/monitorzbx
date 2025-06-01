@@ -121,7 +121,7 @@ Puedes personalizar la configuración de MariaDB y automatizar su despliegue med
 
 Con esto aseguramos que la creación del contenedor se realice mediante un archivo, y que su variable de creación no quede expuesta durante la ejecución del contenedor. Para ello, podemos ir a la siguiente ruta:
 
-[Haz clic aquí para ver el archivo](db-docker/Dockerfile)
+[Haz clic aquí para ver el archivo](bd-docker/Dockerfile)
 
 Encontrarás algo muy básico, donde solo se especifica la imagen a utilizar y la variable para la contraseña del usuario root.
 
@@ -155,6 +155,9 @@ volumes:
 Lo puedes ejecutar con: docker compose up -d
 
 Ten en cuenta que debes estar ubicado en el directorio donde se encuentra tu archivo docker-compose.yml.
+
+[Haz clic aquí para ver el archivo](bd-docker/docker-compose.yml)
+
 
 ## 🧩 Utilidades y Debug
 
