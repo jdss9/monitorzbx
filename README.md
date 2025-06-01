@@ -98,9 +98,9 @@ zcat /usr/share/zabbix/sql-scripts/mysql/server.sql.gz | mysql --default-charact
 
 la ip del host debe ser la ip de localhost, no funcionara poner el nombre ya que este no resuelve internamente esta ip, asi que asegurate de poner la ip 127.0.0.1
 
-## Configuracion zabbix hacia la base de datos.
+## Configuración de Zabbix hacia la base de datos
 
-en el ultimo paso de la configuracion de zabbix te pide realizar la conexion hacia la base de datos, para esto debes poner la ip de local host y el puerto que expusimos en este caso:
+En el último paso de la configuración de Zabbix, se te solicita establecer la conexión con la base de datos. Para esto, debes ingresar la IP de localhost y el puerto que expusimos; en este caso:
 
 - IP: 127.0.0.1
 - Puerto: 3308
@@ -118,6 +118,12 @@ en el ultimo paso de la configuracion de zabbix te pide realizar la conexion hac
 ### 🏗️ Dockerfile
 
 Puedes personalizar la configuración de MariaDB y automatizar su despliegue mediante un Dockerfile:
+
+Con esto aseguramos que la creación del contenedor se realice mediante un archivo, y que su variable de creación no quede expuesta durante la ejecución del contenedor. Para ello, podemos ir a la siguiente ruta:
+
+[Haz clic aquí para ver el archivo](db-docker/Dockerfile)
+
+Encontrarás algo muy básico, donde solo se especifica la imagen a utilizar y la variable para la contraseña del usuario root.
 
 FROM mariadb:11.4.5
 ENV MYSQL_ROOT_PASSWORD=password9
