@@ -143,12 +143,10 @@ services:
     restart: always
     environment:
       MARIADB_ROOT_PASSWORD: password9
-    
     ports:
       - "3309:3306"
     volumes:
       - zbx-compose:/var/lib/mysql
-
 volumes:
   zbx-compose:
 
