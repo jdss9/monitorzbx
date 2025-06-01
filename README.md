@@ -130,18 +130,31 @@ ENV MYSQL_ROOT_PASSWORD=password9
 
 ### 🧰 Docker Compose
 
-version: '3.1'
+Docker Compose es una herramienta mucho más eficiente al momento de ejecutar una aplicación, ya que permite definir y mantener todo tu entorno en un solo archivo. Por eso, en este caso trabajaremos con un volumen persistente, pero lo crearemos directamente en el entorno de Docker, no de forma manual ni con una ruta local específica.
+
+Nuestro archivo tiene como objetivo final crear un volumen, donde se almacenará la información de manera persistente. A diferencia de lo que hemos hecho hasta ahora —donde indicábamos una ruta en el host—, aquí podemos imaginar este volumen como una “caja interna” de Docker donde se guardará toda la información
+
+version: '3.8'
+
 services:
-  db:
+  mariadb:
     image: mariadb:11.4.5
+    container_name: mariadb-container
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: password9
-      MYSQL_DATABASE: zabbix
+      MARIADB_ROOT_PASSWORD: password9
+    
     ports:
-      - "3308:3306"
+      - "3309:3306"
     volumes:
-      - /opt/zabbix/per_data:/var/lib/mysql
+      - zbx-compose:/var/lib/mysql
+
+volumes:
+  zbx-compose:
+
+Lo puedes ejecutar con: docker compose up -d
+
+Ten en cuenta que debes estar ubicado en el directorio donde se encuentra tu archivo docker-compose.yml.
 
 ## 🧩 Utilidades y Debug
 
