@@ -39,17 +39,19 @@ docker pull mariadb:11.4.5
 
 ### 3. Ejecutar contenedor de MariaDB
 
-📌 Se utilizará almacenamiento persistente en `/opt/zabbix/per_data` y se expondrá el puerto `3308` hacia el host.
+📌 Se utilizará almacenamiento persistente en `/opt/zabbix/per_data` y se expondrá el puerto `3308` hacia el contenedor.
 
-docker run --restart=always -d \\
-  --name zabbix-db \\
-  -e MYSQL_ROOT_PASSWORD=password9 \\
-  -e MYSQL_DATABASE=zabbix \\
-  -p 3308:3306 \\
-  -v /opt/zabbix/per_data:/var/lib/mysql \\
+docker run --restart=always -d
+  --name zabbix-db
+  -e MYSQL_ROOT_PASSWORD=password9
+  -e MYSQL_DATABASE=zabbix
+  -p 3308:3306
+  -v /opt/zabbix/per_data:/var/lib/mysql
   mariadb:11.4.5
 
 🔐 Reemplaza `password9` por una contraseña segura para producción.
+
+![Portada](pictures/contenedorcreado.png)
 
 ### 4. Verificar conexión a la base de datos
 
