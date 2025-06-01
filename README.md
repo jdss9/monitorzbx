@@ -40,7 +40,7 @@ docker pull mariadb:11.4.5
 ### 3. Ejecutar contenedor de MariaDB
 
 📌 Se utilizará almacenamiento persistente en `/opt/zabbix/per_data` y se expondrá el puerto `3308` hacia el contenedor.
-
+```
 docker run --restart=always -d \n
   --name zabbix-db
   -e MYSQL_ROOT_PASSWORD=password9
@@ -48,7 +48,7 @@ docker run --restart=always -d \n
   -p 3308:3306
   -v /opt/zabbix/per_data:/var/lib/mysql
   mariadb:11.4.5
-
+```
 🔐 Reemplaza `password9` por una contraseña segura para producción.
 
 ![contenderbasic](pictures/contenedorcreado.png)
@@ -81,21 +81,21 @@ Nota: Un contenedor internamente crea una red la cual permite la conexion de los
 La red por defecto de Docker usa el rango 172.17.0.0/16. Si estás accediendo desde otro contenedor, la IP visible para MySQL será probablemente 172.17.0.1.
 
 Crea el usuario con permisos específicos según la IP desde la que se conectará Zabbix:
-
+```
 CREATE USER 'zabbix'@'172.17.0.1' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON zabbix.* TO 'zabbix'@'172.17.0.1';
-
+```
 ## 🧱 Inicializar la Base de Datos de Zabbix
 
 Una vez creados los permisos y base de datos:
-
+```
 CREATE DATABASE zabbix CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 SET GLOBAL log_bin_trust_function_creators = 1;
-
+```
 Cargar la estructura inicial de la base de datos:
-
+```
 zcat /usr/share/zabbix/sql-scripts/mysql/server.sql.gz | mysql --default-character-set=utf8mb4 --host 127.0.0.1 -u zabbix -P 3308 -p zabbix
-
+```
 la ip del host debe ser la ip de localhost, no funcionara poner el nombre ya que este no resuelve internamente esta ip, asi que asegurate de poner la ip 127.0.0.1
 
 ## Configuración de Zabbix hacia la base de datos
@@ -124,10 +124,10 @@ Con esto aseguramos que la creación del contenedor se realice mediante un archi
 [Haz clic aquí para ver el archivo](bd-docker/Dockerfile)
 
 Encontrarás algo muy básico, donde solo se especifica la imagen a utilizar y la variable para la contraseña del usuario root.
-
+```
 FROM mariadb:11.4.5
 ENV MYSQL_ROOT_PASSWORD=password9
-
+```
 ### 🧰 Docker Compose
 
 Docker Compose es una herramienta mucho más eficiente al momento de ejecutar una aplicación, ya que permite definir y mantener todo tu entorno en un solo archivo. Por eso, en este caso trabajaremos con un volumen persistente, pero lo crearemos directamente en el entorno de Docker, no de forma manual ni con una ruta local específica.
@@ -160,14 +160,14 @@ Ten en cuenta que debes estar ubicado en el directorio donde se encuentra tu arc
 ## 🧩 Utilidades y Debug
 
 Establecer configuración de idioma:
-
+```
 sudo locale-gen en_US.UTF-8
 sudo update-locale LANG=en_US.UTF-8
-
+```
 Ver últimos mensajes del sistema:
-
+```
 tail -n 100 /var/log/syslog
-
+```
 ## ✅ Estado Actual
 
 - ✅ Base de datos MariaDB corriendo en contenedor  
