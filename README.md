@@ -72,6 +72,10 @@ FLUSH PRIVILEGES;
 
 🔎 '%' permite conexiones desde cualquier IP. Para mayor seguridad, usa solo la IP específica del contenedor o la red Docker.
 
+Nota: Un contenedor internamente crea una red la cual permite la conexion de los contenedores, claro aca debes tener en cuenta que un contenedor se puede crear con red segemntada, red de host, bridge etc, pero en este caso se crea con la red local creado por docker la cual es 172.17.0.0/16.
+
+![zabbix](pictures/zabbixcar.png)
+
 ## 🌐 Consideraciones de Red y Seguridad
 
 La red por defecto de Docker usa el rango 172.17.0.0/16. Si estás accediendo desde otro contenedor, la IP visible para MySQL será probablemente 172.17.0.1.
@@ -90,8 +94,18 @@ SET GLOBAL log_bin_trust_function_creators = 1;
 
 Cargar la estructura inicial de la base de datos:
 
-zcat /usr/share/zabbix/sql-scripts/mysql/server.sql.gz | \\
-  mysql --default-character-set=utf8mb4 --host 127.0.0.1 -u zabbix -P 3308 -p zabbix
+zcat /usr/share/zabbix/sql-scripts/mysql/server.sql.gz | mysql --default-character-set=utf8mb4 --host 127.0.0.1 -u zabbix -P 3308 -p zabbix
+
+la ip del host debe ser la ip de localhost, no funcionara poner el nombre ya que este no resuelve internamente esta ip, asi que asegurate de poner la ip 127.0.0.1
+
+## Configuracion zabbix hacia la base de datos.
+
+en el ultimo paso de la configuracion de zabbix te pide realizar la conexion hacia la base de datos, para esto debes poner la ip de local host y el puerto que expusimos en este caso:
+
+- IP: 127.0.0.1
+- Puerto: 3308
+
+![zabbix](pictures/errorysolucionbd.png)
 
 ## 🛡️ Notas de Seguridad
 
